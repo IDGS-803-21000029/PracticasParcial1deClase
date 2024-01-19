@@ -1,5 +1,5 @@
 
-cantAsteriscos = int(input("Ingresa la cantidad de asteriscos \n5"))
+cantAsteriscos = int(input("Ingresa la cantidad de asteriscos \n"))
 
 res = ""
 for canty in range(cantAsteriscos):
