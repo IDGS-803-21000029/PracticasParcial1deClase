@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cinepolis</title>
+  <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../static/bootstrap/css/bootstrap-responsive.min.css" />
+</head>
+
+<body style="background-color: blue;">
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="span6 offset3">
+          <div class="well">
+            <h2>CINEPOLIS</h2>
+            <form class="form-horizontal" action="/cinepolis" method="POST">
+              <div class="control-group">
+                <label class="control-label">Nombre</label>
+                <div class="controls">
+                  <input type="text" name="txtNombre" placeholder="Nombre" value={{nombre}}>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Cantidad Compradores:</label>
+                <div class="controls">
+                  <input type="text" name="txtCantCompradores" placeholder="Cantidad de Compradores">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Tarjeta CINECO:</label>
+                <div class="controls">
+                  <label class="radio inline">
+                    <input type="radio" name="card" value="1"> Si
+                  </label>
+                  <label class="radio inline">
+                    <input type="radio" name="card" value="0"> No
+                  </label>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Cantidad de Boletos:</label>
+                <div class="controls">
+                  <input type="text" name="txtCantBoletos" placeholder="Cantidad de Boletos">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <button type="submit" class="btn btn-primary">Procesar</button>
+                  <button type="button" class="btn btn-primary" action="/cinepolis" method="GET">Nueva Compra</button>
+                </div>
+              </div>
+              <hr />
+              <div class="control-group">
+                <label class="control-label"><strong>Valor a Pagar:</strong></label>
+                <div class="controls">
+                  <input type="text" name="txtValorAPagar" placeholder="Valor a pagar" value={{total}} >
+                </div>
+              </div>
+              <div class="control-group">
+                <label style="color: red"><strong>{{mensaje}}</strong></label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+</body>
+</html>
