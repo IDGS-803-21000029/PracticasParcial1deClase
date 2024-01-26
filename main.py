@@ -32,7 +32,7 @@ def operaciones():
     else:
         return "<h1>No se ha podido identificar la operacion</h1>"
     
-# CINEPOLIS
+# BOLETOS CINEPOLIS
 @app.route("/cinepolis", methods=["POST", "GET"])
 def cine():
     if request.method == "GET":
