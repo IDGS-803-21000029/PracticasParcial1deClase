@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request
+import forms
+import math
 
 app = Flask(__name__)
 
@@ -59,6 +61,26 @@ def cine():
             valorTotal = valorTotal - (valorTotal * 0.10)
 
         return render_template("cinepolis.html", total=float(valorTotal), nombre=str(nombre))
+    
+# FORMULA DISTANCIA
+@app.route("/distancia", methods=("GET", "POST"))
+def distancia():
+    dis_form = forms.distanceForm(request.form)
+    if request.method == "GET":
+        return render_template("distanciaEntrePuntos.html", form=dis_form, total=0)
+    else:
+        x1 = float(dis_form.x1.data)
+        y1 = float(dis_form.y1.data)
+        x2 = float(dis_form.x2.data)
+        y2 = float(dis_form.y2.data)
+        total:float = 0
+
+        sum = (math.pow((x2 - x1), 2)) + (math.pow((y2 - y1), 2))
+        total = math.sqrt(sum)
+
+        return render_template("distanciaEntrePuntos.html", form=dis_form, total=float(total))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
