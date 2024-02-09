@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import forms
 import math
+import coloresResistencia
 
 app = Flask(__name__)
 
@@ -79,6 +80,27 @@ def distancia():
         total = math.sqrt(sum)
 
         return render_template("distanciaEntrePuntos.html", form=dis_form, total=float(total))
+    
+# CALCULADORA DE RESISTENCIAS
+@app.route("/resistencia", methods=["GET", "POST"])
+def calculoResistencias():
+    res_form = forms.resistenciaForm(request.form)
+
+    if request.method == "GET":
+        return render_template("calculoResistencias.html", form=res_form, valor=0, valorMax=0, valorMin=0, colb1="", colb2="", colb3="", coltol="")
+    else:
+        banda1 = str(res_form.banda1.data)
+        banda2 = str(res_form.banda2.data)
+        banda3 = str(res_form.banda3.data)
+        tolerancia = str(res_form.tolerancia.data)
+
+        resultado = coloresResistencia.calcularResistencia(banda1, banda2, banda3, tolerancia)
+        colb1 = coloresResistencia.obtenerColores(banda1)
+        colb2 = coloresResistencia.obtenerColores(banda2)
+        colb3 = coloresResistencia.obtenerColores(banda3)
+        coltol = coloresResistencia.obtenerColores(tolerancia)
+        
+        return render_template("calculoResistencias.html", form=res_form, valor=resultado[0], valorMax=resultado[1], valorMin=resultado[2], colb1=colb1, colb2=colb2, colb3=colb3, coltol=coltol)
 
 
 
