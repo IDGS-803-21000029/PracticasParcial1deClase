@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import forms
 import math
 import coloresResistencia
+from io import open_code
 
 app = Flask(__name__)
 
@@ -102,7 +103,70 @@ def calculoResistencias():
         
         return render_template("calculoResistencias.html", form=res_form, valor=resultado[0], valorMax=resultado[1], valorMin=resultado[2], colb1=colb1, colb2=colb2, colb3=colb3, coltol=coltol)
 
+# DICCIONARIO INGLES - ESPAÑOL
+@app.route("/diccionario-en-es", methods=["GET"])
+def diccionario():
+    insert_form = forms.insertarPalabraFrom(request.form)
+    search_form = forms.buscarPalabraForm(request.form)
+    return render_template("diccionarioEnEs.html", insertForm = insert_form, searchForm = search_form, mensaje="")
 
+# Insertar Palabra
+@app.route("/insertarPalabra", methods=['POST'])
+def insertarPalabra():
+    insert_form = forms.insertarPalabraFrom(request.form)
+    search_form = forms.buscarPalabraForm(request.form)
+    mensaje = ""
+    busqueda = ""
+    palabraExistente = False
 
+    if insert_form.validate():
+        wingles = insert_form.palabraIngles.data.strip().upper()
+        wespanol = insert_form.palabraEspanol.data.strip().upper()
+
+        with open('diccionario-en-es.txt', 'r') as diccionario:
+            for line in diccionario:
+                palabras = line.strip().split('-')
+                if palabras[0].strip() == wespanol and palabras[1].strip() == wingles:
+                    mensaje = "La palabra ya existe en el diccionario"
+                    palabraExistente = True
+                    break
+
+        if not palabraExistente:
+            with open('diccionario-en-es.txt', 'a') as diccionario:
+                diccionario.write(wespanol + "-" + wingles + "\n")
+                mensaje = "La palabra " + wespanol + "-" + wingles + " fue agregada al diccionario"
+
+    return render_template("diccionarioEnEs.html", insertForm=insert_form, searchForm=search_form, mensaje=mensaje, busqueda=busqueda)
+
+# Buscar Palabra
+@app.route("/buscarPalabra", methods=["POST"])
+def buscarPalabra():
+    insert_form = forms.insertarPalabraFrom(request.form)
+    search_form = forms.buscarPalabraForm(request.form)
+    mensaje = ""
+    busqueda = ""
+
+    if search_form.validate():
+        wbusqueda = search_form.palabra.data.strip().upper()
+        idioma = search_form.lenguaje.data
+
+        with open('diccionario-en-es.txt', 'r') as diccionario:
+            if idioma == "Español":
+                for line in diccionario:
+                    palabras = line.strip().split('-')
+                    if palabras[1] == wbusqueda:
+                        busqueda = palabras[0]
+
+            elif idioma == "Ingles":
+                for line in diccionario:
+                    palabras = line.strip().split('-')
+                    if palabras[0] == wbusqueda:
+                        busqueda = palabras[1]
+
+            if busqueda == "":
+                busqueda = "No se encontro la palabra, verificala y vuelve a intentarlo"
+
+    return render_template("diccionarioEnEs.html", insertForm=insert_form, searchForm=search_form, mensaje=mensaje, busqueda=busqueda)
+    
 if __name__ == "__main__":
     app.run(debug=True)

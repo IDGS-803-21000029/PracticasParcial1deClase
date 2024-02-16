@@ -1,0 +1,51 @@
+{%extends 'layout.html' %}
+
+{%block content%}
+
+    {%import "_macros.html" as macros %}
+
+    <div class="container">
+        <h1>Diccionario Inglés - Español</h1>
+    
+        <div class="well">
+            <form class="form-horizontal" action="/insertarPalabra" method="POST" novalidate>
+                <fieldset>
+                    <legend>Registrar nueva palabra</legend>
+                    <div class="control-group">
+                        {{macros.render_field(insertForm.palabraIngles)}}
+                    </div>
+                    <div class="control-group">
+                        {{macros.render_field(insertForm.palabraEspanol)}}
+                    </div>
+                    <div class="form-actions">
+                        <input type="submit" class="btn btn-primary" name="btn1" value="Registrar">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    
+        <div class="alert alert-info" role="alert">
+            <h3>{{mensaje}}</h3>
+        </div>
+    
+        <div class="well">
+            <form class="form-inline" action="/buscarPalabra" method="POST" novalidate>
+                <div class="control-group">
+                    <label for="lenguaje">Elige el idioma a traducir: </label>
+                    {{macros.render_field(searchForm.lenguaje)}}
+                </div>
+                <div class="control-group">
+                    {{macros.render_field(searchForm.palabra)}}
+                </div>
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary" name="btn2" value="Buscar">
+                </div>
+            </form>
+            <div class="alert" role="alert">
+                <h5>Traducción</h5>
+                <input type="text" class="input-xlarge" disabled value="{{busqueda}}">
+            </div>
+        </div>
+    </div>
+    
+{%endblock%}
